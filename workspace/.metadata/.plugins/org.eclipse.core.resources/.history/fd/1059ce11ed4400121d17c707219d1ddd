@@ -1,0 +1,60 @@
+package com.example.test;
+
+import android.app.Activity;
+import android.content.ClipData;
+import android.content.ClipboardManager;
+import android.content.Context;
+import android.os.Bundle;
+import android.util.Log;
+import android.view.Menu;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
+
+public class MainActivity extends Activity {
+
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		setContentView(R.layout.activity_main);
+		
+		Button button = (Button)findViewById(R.id.button);
+		button.setOnClickListener(new OnClickListener() {
+			
+			@Override
+			public void onClick(View arg0) {
+				ClipboardManager cm = (ClipboardManager)MainActivity.this
+		                .getSystemService(Context.CLIPBOARD_SERVICE);
+		        ClipData clipData = cm.getPrimaryClip();
+		        if (clipData != null) {
+		            ClipData.Item clipItem = clipData.getItemAt(0);
+		            // if copy is not a text or a uri
+		            /*if (null == clipItem.getText() && null == clipItem.getUri()) {
+		                return ;
+		            }
+		            CharSequence pasteText = clipItem.getText();
+		            // if copy a uri
+		            if (null == pasteText) {
+		                pasteText = "" + clipIte
+		                m.getUri();
+		            }*/
+		            CharSequence pasteText = clipItem.coerceToText(mContext);
+		            Log.e(WebViewClassic.class.getName(), "into pasteFromClipboard:" + pasteText);
+		            if (mInputConnection != null) {
+		                mInputConnection.replaceSelection(pasteText);
+		            }
+		        }
+			}
+		});
+		
+		
+	}
+
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		// Inflate the menu; this adds items to the action bar if it is present.
+		getMenuInflater().inflate(R.menu.activity_main, menu);
+		return true;
+	}
+
+}
